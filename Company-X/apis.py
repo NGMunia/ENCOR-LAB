@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, HTTPException
+from fastapi import FastAPI, status
 from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
 from netmiko import ConnectHandler
@@ -21,7 +21,7 @@ def snmpconfig(Device_ID: str, post:snmpclass):
     conn.enable()
 
     commands = ['ip access-list standard SNMP-SERVER',
-                'permit host '+post.snmp_server,
+                'permit udp host '+post.snmp_server+' '+'eq 161',
                 'snmp-server community device_snmp ro SNMP-SERVER',
                 'snmp-server system-shutdown',
                 'snmp-server enable traps config',
@@ -68,6 +68,7 @@ def netflow(Device_ID: str, post:netflowclass):
 
     commands = ['ip flow-export destination '+post.flow_server+' '+str(post.udp_port),
                 'ip flow-export source '+post.source_intf,
+                'ip flow-export version 9',
                 'ip flow-cache timeout active 1',
                 'int '+post.source_intf,
                 'ip nbar protocol-discovery',

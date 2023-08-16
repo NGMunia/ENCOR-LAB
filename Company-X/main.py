@@ -4,8 +4,6 @@ from rich import print as rp
 from Devices import Routers
 import ntc_templates
 
-
-
 '''
 Running configurations
 '''
