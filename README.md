@@ -8,7 +8,7 @@ AS 123:
   - VRRP is configured with object tracking with the help
     of IPSLA
   - Inbound traffic is via R2 (AS-prepending)
-  - AS is a non-transit AS
+- AS is a non-transit AS
 
 AS-130
   - Removes the private-AS while advertising the 17.17.17.0/24 prefix
