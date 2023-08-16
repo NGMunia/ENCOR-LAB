@@ -30,10 +30,12 @@ Company-X
   - DMVPN phase 2 tunnel between its HQ, Branch and R5 routers with HQ being the hub
   - OSPF is used to route traffic between tunnels
   - DMVPN MGRE tunnel is area 0 and HQ,R5 and Branch networks are Areas 10, 50, 20 respectively.
+
 Company-A
   - LISP is used to advertise prefixes behind R16 and R26.
   - LISP is running on top of MGRE (for privacy purposes)
   - R6 acts as Map server/resolver
+
 Cust-A
   - IPsec VTI is configured between R7 and R8
   - Multicast Traffic is propagated through the tunnel between R7 and R8(PIM sparse mode) with static RP

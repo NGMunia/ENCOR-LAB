@@ -18,7 +18,4 @@ for devices in Routers.values():
     with open(f'{filepath}/{hostname}','w') as f:
         f.write(output)
         conn.disconnect()
-    rp(f'[cyan] Host {hostname} Backup successful!')
-
-
-    
+    rp(f'[cyan] Host {hostname} backup successful!')
