@@ -1,0 +1,204 @@
+Building configuration...
+
+Current configuration : 2772 bytes
+!
+! Last configuration change at 09:26:07 UTC Wed Aug 16 2023
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R6
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel0
+ ip address 172.31.1.1 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication abc123
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 10
+ tunnel source Ethernet0/0.20
+ tunnel mode gre multipoint
+!
+interface Ethernet0/0
+ no ip address
+!
+interface Ethernet0/0.20
+ encapsulation dot1Q 20
+ ip address 44.67.28.20 255.255.255.248
+!
+interface Ethernet0/1
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+!
+router eigrp EIGRP
+ !
+ address-family ipv4 unicast autonomous-system 100
+  !
+  af-interface Tunnel0
+   no next-hop-self
+   no split-horizon
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  network 172.31.0.0
+ exit-address-family
+!
+router lisp
+ site A
+  authentication-key cisco123
+  eid-prefix 10.0.16.0/24 accept-more-specifics
+  exit
+ !
+ site B
+  authentication-key cisco123
+  eid-prefix 10.0.26.0/24 accept-more-specifics
+  exit
+ !
+ ipv4 map-server
+ ipv4 map-resolver
+ exit
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 Ethernet0/0.20 44.67.28.19
+!
+!
+!

@@ -1,0 +1,197 @@
+Building configuration...
+
+Current configuration : 2770 bytes
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+fhrp version vrrp v3
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no ip address
+!
+interface Ethernet0/0.10
+ description Company-XYZ-subnet
+ encapsulation dot1Q 10
+ ip address 44.67.28.2 255.255.255.240
+ vrrp 10 address-family ipv4
+  vrrpv2
+  address 44.67.28.3 primary
+  exit-vrrp
+!
+interface Ethernet0/0.20
+ description Company-ABC-subnet
+ encapsulation dot1Q 20
+ ip address 44.67.28.18 255.255.255.248
+ vrrp 20 address-family ipv4
+  vrrpv2
+  address 44.67.28.19 primary
+  exit-vrrp
+!
+interface Ethernet0/0.30
+ description Cust-1-subnet
+ encapsulation dot1Q 30
+ ip address 44.67.28.26 255.255.255.248
+ vrrp 30 address-family ipv4
+  vrrpv2
+  address 44.67.28.27 primary
+  exit-vrrp
+!
+interface Ethernet0/1
+ description Link-to-AS-110
+ ip address 110.110.110.2 255.255.255.252
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router bgp 123
+ bgp log-neighbor-changes
+ network 44.67.28.0 mask 255.255.255.240
+ aggregate-address 44.67.28.0 255.255.255.0 summary-only
+ neighbor 110.110.110.1 remote-as 110
+ neighbor 110.110.110.1 filter-list 10 out
+!
+ip forward-protocol nd
+!
+ip as-path access-list 10 permit ^$
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
