@@ -36,7 +36,7 @@ Company-A
   - R6 acts as Map server/resolver
 Cust-A
   - IPsec VTI is configured between R7 and R8
-  - Multicast Traffic is propagated through the tunnel (PIM sparse mode) with static RP
+  - Multicast Traffic is propagated through the tunnel between R7 and R8(PIM sparse mode) with static RP
 
 
 Automation:
