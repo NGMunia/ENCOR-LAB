@@ -36,7 +36,7 @@ Cust-A
 
 
 Automation:
-
+Company-X
 - Automation is used to configure repetitive tasks on routers like SNMP etc.
 - ive created basic APIs using FastAPI that combined with Netmiko to interact with network devices.
 - Ive also created Jinja templates used in conjuction with Netmiko and FastAPi that are used to configure the routers.
