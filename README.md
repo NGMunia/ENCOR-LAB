@@ -26,23 +26,23 @@ AS65530
 Overlay:
 
 Company-X
-  -DMVPN phase 2 tunnel between its HQ, Branch and R5 routers with HQ being the hub
-  -OSPF is used to route traffic between tunnels
-  -DMVPN MGRE tunnel is area 0 and HQ,R5 and Branch networks are Areas 10, 50, 20 respectively.
+  - DMVPN phase 2 tunnel between its HQ, Branch and R5 routers with HQ being the hub
+  - OSPF is used to route traffic between tunnels
+  - DMVPN MGRE tunnel is area 0 and HQ,R5 and Branch networks are Areas 10, 50, 20 respectively.
 Company-A
-  -LISP is used to advertise prefixes behind R16 and R26.
-  -LISP is running on top of MGRE (for privacy purposes)
-  -R6 acts as Map server/resolver
+  - LISP is used to advertise prefixes behind R16 and R26.
+  - LISP is running on top of MGRE (for privacy purposes)
+  - R6 acts as Map server/resolver
 Cust-A
-  -IPsec VTI is configured between R7 and R8
-  -Multicast Traffic is propagated through the tunnel (PIM sparse mode) with static RP
+  - IPsec VTI is configured between R7 and R8
+  - Multicast Traffic is propagated through the tunnel (PIM sparse mode) with static RP
 
 
 Automation:
 Company-X
-  -Automation is used to configure repetitive tasks on routers like SNMP etc.
-  -ive created basic APIs using FastAPI that combined with Netmiko to   interact with network devices.
-  -Ive also created Jinja templates used in conjuction with Netmiko and FastAPi that are used to configure the routers.
+  - Automation is used to configure repetitive tasks on routers like SNMP etc.
+  - ive created basic APIs using FastAPI that combined with Netmiko to   interact with network devices.
+  - Ive also created Jinja templates used in conjuction with Netmiko and FastAPi that are used to configure the routers.
 
 
 Quality of Service:
