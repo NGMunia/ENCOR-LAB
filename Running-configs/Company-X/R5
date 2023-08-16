@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 3646 bytes
+Current configuration : 4301 bytes
 !
-! Last configuration change at 11:13:13 GMT Wed Aug 16 2023 by Automation
+! Last configuration change at 17:56:33 GMT Wed Aug 16 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -56,7 +56,6 @@ no ip icmp rate-limit unreachable
 !
 !
 !
-ip flow-cache timeout active 1
 no ip domain lookup
 ip domain name x.com
 ip cef
@@ -80,6 +79,22 @@ redundancy
 !
 ip tcp synwait-time 5
 ip ssh version 2
+!
+class-map match-any Routing-CoPP-class
+ match access-group name Routing-CoPP-acl
+class-map match-any Management-CoPP-class
+ match access-group name Management-CoPP-acl
+class-map match-any Icmp-CoPP-class
+ match access-group name Icmp-CoPP-acl
+!
+policy-map CoPP-Policy
+ class Routing-CoPP-class
+  police 64000 conform-action transmit  exceed-action transmit  violate-action transmit 
+ class Management-CoPP-class
+  police 128000 conform-action transmit  exceed-action transmit  violate-action transmit 
+ class Icmp-CoPP-class
+  police 8000 conform-action transmit  exceed-action drop 
+!
 ! 
 !
 !
@@ -132,9 +147,6 @@ interface Ethernet0/0.10
 !
 interface Ethernet0/1
  ip address 192.168.50.1 255.255.255.0
- ip nbar protocol-discovery
- ip flow ingress
- ip flow egress
  ip ospf 1 area 50
 !
 interface Ethernet0/2
@@ -207,11 +219,6 @@ router ospf 1
 !
 ip forward-protocol nd
 !
-ip flow-export source Ethernet0/1
-ip flow-export destination 192.168.50.100 9997
-ip flow-top-talkers
- top 5
- sort-by bytes
 !
 no ip http server
 no ip http secure-server
@@ -219,6 +226,14 @@ ip route 0.0.0.0 0.0.0.0 Ethernet0/0.10 44.67.28.3
 !
 ip access-list standard SNMP-SERVER
  permit 192.168.50.100
+!
+ip access-list extended Icmp-CoPP-acl
+ permit icmp any any
+ip access-list extended Management-CoPP-acl
+ permit udp host 192.168.50.100 any eq snmp
+ permit tcp any any eq 22
+ip access-list extended Routing-CoPP-acl
+ permit ospf any host 224.0.0.6
 !
 !
 snmp-server community device_snmp RO SNMP-SERVER
@@ -230,6 +245,7 @@ snmp-server host 192.168.50.100 version 2c device_snmp
 !
 !
 control-plane
+ service-policy input CoPP-Policy
 !
 !
 !

@@ -58,3 +58,4 @@ Security:
 
 Company-X firewall
   - Zone based firewall is configured to separate LAN and Internet links
+  - Control-plane policing has been configured on HQ, R5 and Branch routers

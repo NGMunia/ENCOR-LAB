@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 3653 bytes
+Current configuration : 3409 bytes
 !
-! Last configuration change at 11:08:56 GMT Wed Aug 16 2023 by Automation
+! No configuration change since last restart
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -63,7 +63,6 @@ ip dhcp pool HQ-LAN
 !
 !
 !
-ip flow-cache timeout active 1
 no ip domain lookup
 ip domain name abc.com
 ip cef
@@ -123,9 +122,6 @@ policy-map Network-traffic-policy
 !
 interface Ethernet0/0
  ip address 192.168.10.1 255.255.255.0
- ip nbar protocol-discovery
- ip flow ingress
- ip flow egress
  ip ospf 1 area 10
 !
 interface Ethernet0/1
@@ -203,11 +199,6 @@ router ospf 1
 !
 ip forward-protocol nd
 !
-ip flow-export source Ethernet0/0
-ip flow-export destination 192.168.50.100 9995
-ip flow-top-talkers
- top 5
- sort-by bytes
 !
 no ip http server
 no ip http secure-server

@@ -1,8 +1,9 @@
 Building configuration...
 
-Current configuration : 3295 bytes
+Current configuration : 4271 bytes
 !
-! Last configuration change at 09:21:36 GMT Wed Aug 16 2023 by Automation
+! Last configuration change at 17:54:55 GMT Wed Aug 16 2023 by Automation
+! NVRAM config last updated at 17:58:04 GMT Wed Aug 16 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -79,6 +80,22 @@ redundancy
 !
 ip tcp synwait-time 5
 ip ssh version 2
+!
+class-map match-any Routing-CoPP-class
+ match access-group name Routing-CoPP-acl
+class-map match-any Management-CoPP-class
+ match access-group name Management-CoPP-acl
+class-map match-any Icmp-CoPP-class
+ match access-group name Icmp-CoPP-acl
+!
+policy-map CoPP-Policy
+ class Routing-CoPP-class
+  police 64000 conform-action transmit  exceed-action transmit  violate-action transmit 
+ class Management-CoPP-class
+  police 128000 conform-action transmit  exceed-action transmit  violate-action transmit 
+ class Icmp-CoPP-class
+  police 8000 conform-action transmit  exceed-action drop 
+!
 ! 
 !
 !
@@ -205,6 +222,15 @@ ip route 0.0.0.0 0.0.0.0 Ethernet0/0 110.110.110.9
 ip access-list standard SNMP-SERVER
  permit 192.168.50.100
 !
+ip access-list extended Icmp-CoPP-acl
+ permit icmp any any
+ip access-list extended Management-CoPP-acl
+ permit udp host 192.168.50.100 any eq snmp
+ permit tcp any any eq 22
+ip access-list extended Routing-CoPP-acl
+ permit ospf any host 224.0.0.6
+ permit ospf any host 224.0.0.5
+!
 !
 snmp-server community device_snmp RO SNMP-SERVER
 snmp-server system-shutdown
@@ -215,6 +241,7 @@ snmp-server host 192.168.50.100 version 2c device_snmp
 !
 !
 control-plane
+ service-policy input CoPP-Policy
 !
 !
 !
