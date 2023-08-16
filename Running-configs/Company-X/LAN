@@ -1,0 +1,253 @@
+Building configuration...
+
+Current configuration : 3653 bytes
+!
+! Last configuration change at 11:08:56 GMT Wed Aug 16 2023 by Automation
+!
+version 15.5
+service timestamps debug datetime localtime year
+service timestamps log datetime localtime year
+no service password-encryption
+!
+hostname LAN
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$3wfN$GhnW34dWHVnUqxsb.IWgb/
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+clock timezone GMT 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+!
+ip dhcp pool HQ-LAN
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1 
+ dns-server 8.8.8.8 
+ lease 0 2
+!
+!
+!
+ip flow-cache timeout active 1
+no ip domain lookup
+ip domain name abc.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+username Automation secret 5 $1$PNBG$mLOWbTPCWXAutNtnBYdwM0
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+!
+class-map match-any Critical-traffic-class
+ match access-group name critical-traffic-acl
+class-map match-any Social-media-class
+ match protocol twitter
+ match protocol facebook
+ match protocol instagram
+class-map match-any Scavenger-traffic-class
+ match protocol bittorrent
+ match protocol netflix
+!
+policy-map Network-traffic-policy
+ class Scavenger-traffic-class
+  drop
+ class Social-media-class
+  set dscp af13
+  police 250000 conform-action transmit  exceed-action drop 
+ class Critical-traffic-class
+  bandwidth percent 30 
+  set dscp af31
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ ip nbar protocol-discovery
+ ip flow ingress
+ ip flow egress
+ ip ospf 1 area 10
+!
+interface Ethernet0/1
+ ip address 10.0.0.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf 1 area 10
+ service-policy output Network-traffic-policy
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router ospf 1
+ router-id 1.1.1.1
+!
+ip forward-protocol nd
+!
+ip flow-export source Ethernet0/0
+ip flow-export destination 192.168.50.100 9995
+ip flow-top-talkers
+ top 5
+ sort-by bytes
+!
+no ip http server
+no ip http secure-server
+!
+ip access-list standard SNMP-SERVER
+ permit 192.168.50.100
+!
+ip access-list extended critical-traffic-acl
+ permit ip any 192.168.50.0 0.0.0.255
+!
+!
+snmp-server community device_snmp RO SNMP-SERVER
+snmp-server system-shutdown
+snmp-server enable traps config
+snmp-server host 192.168.50.100 version 2c device_snmp 
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ transport input ssh
+!
+ntp update-calendar
+ntp server 10.0.0.1
+!
+end

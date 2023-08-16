@@ -1,0 +1,16 @@
+
+{% if ntp_server == 'ke.pool.ntp.org' %}
+ip domain lookup
+ip name-server 8.8.8.8
+ntp server ke.pool.ntp.org
+ntp update-calendar
+clock timezone GMT +3
+service timestamps log datetime localtime year
+service timestamps debug datetime localtime year
+{% else %}
+ntp server {{ntp_server}}
+ntp update-calendar
+clock timezone GMT +3
+service timestamps log datetime localtime year
+service timestamps debug datetime localtime year
+{% endif %}

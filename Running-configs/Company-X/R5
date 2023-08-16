@@ -1,0 +1,255 @@
+Building configuration...
+
+Current configuration : 3646 bytes
+!
+! Last configuration change at 11:13:13 GMT Wed Aug 16 2023 by Automation
+!
+version 15.5
+service timestamps debug datetime localtime year
+service timestamps log datetime localtime year
+no service password-encryption
+!
+hostname R5
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$okRa$olHUx5S1y/99Q0CQbbHy8.
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+clock timezone GMT 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip flow-cache timeout active 1
+no ip domain lookup
+ip domain name x.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+username Automation secret 5 $1$lDt7$i9FjW5bA26I5E47mTUA1q.
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+! 
+!
+!
+!
+!
+crypto isakmp policy 100
+ encr aes 192
+ hash sha256
+ authentication pre-share
+ group 14
+ lifetime 7200
+crypto isakmp key strongkey address 0.0.0.0        
+!
+!
+crypto ipsec transform-set crypt_ts esp-aes 192 esp-sha256-hmac 
+ mode transport
+!
+crypto ipsec profile crypto-profile
+ set transform-set crypt_ts 
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel10
+ ip address 172.19.10.5 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp authentication xyzdmvpn
+ ip nhrp network-id 10
+ ip nhrp nhs 172.19.10.1 nbma 110.110.110.10 multicast
+ ip tcp adjust-mss 1360
+ ip ospf network broadcast
+ ip ospf hello-interval 15
+ ip ospf priority 0
+ ip ospf 1 area 0
+ tunnel source Ethernet0/0.10
+ tunnel mode gre multipoint
+ tunnel key 10
+ tunnel protection ipsec profile crypto-profile
+!
+interface Ethernet0/0
+ no ip address
+!
+interface Ethernet0/0.10
+ encapsulation dot1Q 10
+ ip address 44.67.28.5 255.255.255.240
+!
+interface Ethernet0/1
+ ip address 192.168.50.1 255.255.255.0
+ ip nbar protocol-discovery
+ ip flow ingress
+ ip flow egress
+ ip ospf 1 area 50
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router ospf 1
+ router-id 172.19.10.5
+ passive-interface Ethernet0/1
+!
+ip forward-protocol nd
+!
+ip flow-export source Ethernet0/1
+ip flow-export destination 192.168.50.100 9997
+ip flow-top-talkers
+ top 5
+ sort-by bytes
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 Ethernet0/0.10 44.67.28.3
+!
+ip access-list standard SNMP-SERVER
+ permit 192.168.50.100
+!
+!
+snmp-server community device_snmp RO SNMP-SERVER
+snmp-server system-shutdown
+snmp-server enable traps config
+snmp-server host 192.168.50.100 version 2c device_snmp 
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ transport input ssh
+!
+ntp update-calendar
+ntp server 172.19.10.1
+!
+end

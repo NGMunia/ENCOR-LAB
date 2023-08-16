@@ -1,0 +1,240 @@
+Building configuration...
+
+Current configuration : 3426 bytes
+!
+! Last configuration change at 09:20:39 GMT Wed Aug 16 2023 by Automation
+!
+version 15.5
+service timestamps debug datetime localtime year
+service timestamps log datetime localtime year
+no service password-encryption
+!
+hostname Firewall
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$HCNh$PobbAf6RdqWkTnkTmqWQ.1
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+clock timezone GMT 3 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip domain name abc.com
+ip name-server 8.8.8.8
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+username Automation secret 5 $1$8s/X$gRQEHqmV.NyYdBwkoIHf6/
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+ip ssh version 2
+!
+class-map type inspect match-any inside-internet-class
+ match protocol tcp
+ match protocol udp
+ match protocol icmp
+!
+policy-map type inspect inside-internet-policy
+ class type inspect inside-internet-class
+  inspect 
+ class class-default
+  drop
+!
+zone security Inside
+zone security Internet
+zone-pair security inside-internet-zone source Inside destination Internet
+ service-policy type inspect inside-internet-policy
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ ip address 10.0.0.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ zone-member security Inside
+ ip ospf network point-to-point
+ ip ospf 1 area 10
+!
+interface Ethernet0/1
+ ip address 10.0.0.5 255.255.255.252
+ zone-member security Inside
+ ip ospf network point-to-point
+ ip ospf 1 area 10
+!
+interface Ethernet0/2
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly in
+ zone-member security Internet
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+router ospf 1
+ router-id 2.2.2.2
+ default-information originate
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list nat_acl interface Ethernet0/2 overload
+ip route 0.0.0.0 0.0.0.0 Ethernet0/2 192.168.122.1
+!
+ip access-list standard SNMP-SERVER
+ permit 192.168.50.100
+ip access-list standard nat_acl
+ permit 192.168.10.0 0.0.0.255
+!
+!
+snmp-server community device_snmp RO SNMP-SERVER
+snmp-server system-shutdown
+snmp-server enable traps config
+snmp-server host 192.168.50.100 version 2c device_snmp 
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 4
+ transport input ssh
+!
+ntp update-calendar
+ntp server ke.pool.ntp.org
+!
+end

@@ -1,0 +1,196 @@
+Building configuration...
+
+Current configuration : 2714 bytes
+!
+! Last configuration change at 07:47:27 UTC Wed Aug 16 2023
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R8
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+no ip icmp rate-limit unreachable
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip multicast-routing
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+crypto isakmp policy 100
+ encr aes 192
+ hash sha256
+ authentication pre-share
+ group 14
+ lifetime 7200
+crypto isakmp key strongkey address 0.0.0.0
+!
+!
+crypto ipsec transform-set crypt_ts esp-aes 192 esp-sha256-hmac
+ mode transport
+!
+crypto ipsec profile crypto-profile
+ set transform-set crypt_ts
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel78
+ ip address 172.31.78.2 255.255.255.252
+ ip pim sparse-mode
+ tunnel source Ethernet0/0.30
+ tunnel mode ipsec ipv4
+ tunnel destination 17.17.17.2
+ tunnel protection ipsec profile crypto-profile
+!
+interface Ethernet0/0
+ no ip address
+!
+interface Ethernet0/0.30
+ encapsulation dot1Q 30
+ ip address 44.67.28.28 255.255.255.248
+!
+interface Ethernet0/1
+ ip address 192.168.2.1 255.255.255.0
+ ip pim sparse-mode
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Serial2/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial2/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/0
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/1
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/2
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+interface Serial3/3
+ no ip address
+ shutdown
+ serial restart-delay 0
+!
+!
+router eigrp 78
+ network 172.31.0.0
+ network 192.168.2.0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip pim rp-address 192.168.2.1
+ip route 0.0.0.0 0.0.0.0 Ethernet0/0.30 44.67.28.27
+!
+!
+!
+!
+control-plane
+!
+!
