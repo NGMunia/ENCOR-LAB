@@ -48,11 +48,11 @@ Company-X
 Quality of Service:
 
 Company-X LAN router:
-  -Social media traffic is policed to 250kbps
-  -Scavenger traffic (torrent) is dropped.
-  -Traffic destined to R5 is marked as critical data and given a CBWFQ bandwidth of 30% of CIR
+  - Social media traffic is policed to 250kbps
+  - Scavenger traffic (torrent) is dropped.
+  - Traffic destined to R5 is marked as critical data and given a CBWFQ bandwidth of 30% of CIR
 
 Security:
 
 Company-X firewall
-  -Zone based firewall is configured to separate LAN and Internet links
+  - Zone based firewall is configured to separate LAN and Internet links
