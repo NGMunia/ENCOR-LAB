@@ -19,7 +19,6 @@ def snmpconfig(Device_ID: str, post:snmpclass):
     device = Routers[Device_ID]
     conn   = ConnectHandler(**device)
     conn.enable()
-
     commands = ['ip access-list standard SNMP-SERVER',
                 'permit udp host '+post.snmp_server+' '+'eq 161',
                 'snmp-server community device_snmp ro SNMP-SERVER',
@@ -65,7 +64,6 @@ def netflow(Device_ID: str, post:netflowclass):
     device = Routers[Device_ID]
     conn   = ConnectHandler(**device)
     conn.enable()
-
     commands = ['ip flow-export destination '+post.flow_server+' '+str(post.udp_port),
                 'ip flow-export source '+post.source_intf,
                 'ip flow-export version 9',
@@ -89,8 +87,17 @@ def device_health(Device_ID: str):
     device = Routers[Device_ID]
     conn = ConnectHandler(**device)
     conn.enable()
-
     command = conn.send_command('show version',use_textfsm=True)
     return command
     
 
+'''
+API that verifies DMVPN status on tunnel routers
+'''
+@app.get('/Get/Devices/Tunnel-Routers/{Device_ID}/DMVPN')
+def showdmvpn(Device_ID: str):
+    device = Routers[Device_ID]
+    conn = ConnectHandler(**device)
+    conn.enable()
+    command = conn.send_command('show dmvpn',use_textfsm=True)
+    return command

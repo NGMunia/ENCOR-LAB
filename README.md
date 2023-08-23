@@ -33,7 +33,7 @@ Company-X
 
 Company-A
   - LISP is used to advertise prefixes behind R16 and R26.
-  - LISP is running on top of MGRE (for privacy purposes)
+  - LISP is running on top of mGRE (for privacy purposes)
   - R6 acts as Map server/resolver
 
 Cust-A
