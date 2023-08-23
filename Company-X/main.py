@@ -5,7 +5,7 @@ from Devices import Routers
 import ntc_templates
 
 '''
-Running configurations
+Backing up Running configurations
 '''
 filepath = input('File storage location: ')
 for devices in Routers.values():
