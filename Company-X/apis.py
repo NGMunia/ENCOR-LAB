@@ -79,3 +79,18 @@ def netflow(Device_ID: str, post:netflowclass):
                 'sort-by bytes']
     result = conn.send_config_set(commands)
     return result.splitlines()
+
+
+'''
+API that shows Router Information/Health
+'''
+@app.get('/Get/Devices/{Device_ID}/Health')
+def device_health(Device_ID: str):
+    device = Routers[Device_ID]
+    conn = ConnectHandler(**device)
+    conn.enable()
+
+    command = conn.send_command('show version',use_textfsm=True)
+    return command
+    
+
