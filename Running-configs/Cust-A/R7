@@ -1,8 +1,8 @@
-uilding configuration...
+Building configuration...
 
-Current configuration : 2672 bytes
+Current configuration : 2994 bytes
 !
-! Last configuration change at 07:30:42 UTC Wed Aug 16 2023
+! Last configuration change at 10:12:05 UTC Tue Aug 29 2023
 !
 version 15.5
 service timestamps debug datetime msec
@@ -30,7 +30,6 @@ mmi snmp-timeout 180
 !
 !
 !
-no ip icmp rate-limit unreachable
 !
 !
 !
@@ -42,10 +41,16 @@ no ip icmp rate-limit unreachable
 
 
 !
+ip dhcp excluded-address 192.168.7.1 192.168.7.20
+!
+ip dhcp pool CUST-A-DHCP
+ network 192.168.7.0 255.255.255.0
+ default-router 192.168.7.1
+ dns-server 8.8.8.8
+ lease 0 2
 !
 !
 !
-no ip domain lookup
 ip multicast-routing
 ip cef
 no ipv6 cef
@@ -65,26 +70,25 @@ cts logging verbose
 redundancy
 !
 !
-ip tcp synwait-time 5
 !
 !
 !
 !
 !
 crypto isakmp policy 100
- encr aes 192
+ encr aes
  hash sha256
  authentication pre-share
- group 14
+ group 5
  lifetime 7200
-crypto isakmp key strongkey address 0.0.0.0
+crypto isakmp key strongkey address 44.67.28.8
 !
 !
-crypto ipsec transform-set crypt_ts esp-aes 192 esp-sha256-hmac
+crypto ipsec transform-set crypt-ts esp-aes 192 esp-sha-hmac
  mode transport
 !
 crypto ipsec profile crypto-profile
- set transform-set crypt_ts
+ set transform-set crypt-ts
 !
 !
 !
@@ -93,19 +97,23 @@ crypto ipsec profile crypto-profile
 !
 !
 interface Tunnel78
- ip address 172.31.78.1 255.255.255.252
+ ip address 172.17.78.1 255.255.255.252
  ip pim sparse-mode
  tunnel source Ethernet0/0
  tunnel mode ipsec ipv4
- tunnel destination 44.67.28.28
+ tunnel destination 44.67.28.8
  tunnel protection ipsec profile crypto-profile
 !
 interface Ethernet0/0
  ip address 17.17.17.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
 !
 interface Ethernet0/1
- ip address 192.168.1.1 255.255.255.0
+ ip address 192.168.7.1 255.255.255.0
  ip pim sparse-mode
+ ip nat inside
+ ip virtual-reassembly in
  ip igmp join-group 239.1.2.78
 !
 interface Ethernet0/2
@@ -173,21 +181,25 @@ interface Serial3/3
  serial restart-delay 0
 !
 !
-router eigrp 78
- network 172.31.0.0
- network 192.168.1.0
+router eigrp EIGRP
+ !
+ address-family ipv4 unicast autonomous-system 100
+  !
+  topology base
+  exit-af-topology
+  network 172.17.0.0
+  network 192.168.7.0
+ exit-address-family
 !
 ip forward-protocol nd
 !
 !
 no ip http server
 no ip http secure-server
-ip pim rp-address 192.168.2.1
+ip pim rp-address 172.17.78.2
+ip nat inside source list nat_acl interface Ethernet0/0 overload
 ip route 0.0.0.0 0.0.0.0 Ethernet0/0 17.17.17.1
 !
-!
-!
-!
-control-plane
-!
+ip access-list standard nat_acl
+ permit 192.168.7.0 0.0.0.255
 !

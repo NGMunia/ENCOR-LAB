@@ -20,7 +20,7 @@ def snmpconfig(Device_ID: str, post:snmpclass):
     conn   = ConnectHandler(**device)
     conn.enable()
     commands = ['ip access-list standard SNMP-SERVER',
-                'permit udp host '+post.snmp_server+' '+'eq 161',
+                'permit host '+post.snmp_server,
                 'snmp-server community device_snmp ro SNMP-SERVER',
                 'snmp-server system-shutdown',
                 'snmp-server enable traps config',

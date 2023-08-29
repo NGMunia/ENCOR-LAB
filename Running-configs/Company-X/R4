@@ -1,15 +1,15 @@
 Building configuration...
 
-Current configuration : 2583 bytes
+Current configuration : 2019 bytes
 !
-! Last configuration change at 10:14:18 UTC Tue Aug 29 2023
+! Last configuration change at 09:08:13 UTC Tue Aug 29 2023
 !
 version 15.5
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R8-Cust-A
+hostname R4-Company-X
 !
 boot-start-marker
 boot-end-marker
@@ -44,7 +44,6 @@ mmi snmp-timeout 180
 !
 !
 !
-ip multicast-routing
 ip cef
 no ipv6 cef
 !
@@ -68,20 +67,6 @@ redundancy
 !
 !
 !
-crypto isakmp policy 100
- encr aes
- hash sha256
- authentication pre-share
- group 5
- lifetime 7200
-crypto isakmp key strongkey address 17.17.17.2
-!
-!
-crypto ipsec transform-set crypt-ts esp-aes 192 esp-sha-hmac
- mode transport
-!
-crypto ipsec profile crypto-profile
- set transform-set crypt-ts
 !
 !
 !
@@ -89,20 +74,16 @@ crypto ipsec profile crypto-profile
 !
 !
 !
-interface Tunnel78
- ip address 172.17.78.2 255.255.255.252
- ip pim sparse-mode
- tunnel source Ethernet0/0
- tunnel mode ipsec ipv4
- tunnel destination 17.17.17.2
- tunnel protection ipsec profile crypto-profile
 !
 interface Ethernet0/0
- ip address 44.67.28.8 255.255.255.0
+ ip address 44.67.28.4 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
 !
 interface Ethernet0/1
- ip address 192.168.8.1 255.255.255.0
- ip pim sparse-mode
+ ip address 192.168.40.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
 !
 interface Ethernet0/2
  no ip address
@@ -168,22 +149,11 @@ interface Serial3/3
  shutdown
  serial restart-delay 0
 !
-!
-router eigrp EIGRP
- !
- address-family ipv4 unicast autonomous-system 100
-  !
-  topology base
-  exit-af-topology
-  network 172.17.0.0
-  network 192.168.8.0
- exit-address-family
-!
 ip forward-protocol nd
 !
 !
 no ip http server
 no ip http secure-server
-ip pim rp-address 172.17.78.2
+ip nat inside source static tcp 192.168.40.100 80 44.67.28.4 80 extendable
 ip route 0.0.0.0 0.0.0.0 Ethernet0/0 44.67.28.3
 !

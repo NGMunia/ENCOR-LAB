@@ -10,6 +10,11 @@ AS 123:
   - Inbound traffic is via R2 (AS-prepending)
 - AS is a non-transit AS
 
+Private VLANs (UPDATE):
+   - Private vlans have been configured on device (SW) to segregate traffic between clients
+       - Community VLAN 100 - Company X
+       - Isolated VLAN 101
+
 AS-130
   - Removes the private-AS while advertising the 17.17.17.0/24 prefix
   - Advertises only a default-route to AS65530
@@ -56,8 +61,31 @@ Company-X LAN router:
   - Scavenger traffic (torrent) is dropped.
   - Traffic destined to R5 is marked as critical data and given a CBWFQ bandwidth of 30% of CIR
 
+
+NAT:
+
+  - The router labeled as 'HTTP' operates in a manner that emulates the functionality of a web server.     
+  - Port forwarding measures have been appropriately established on the router denoted as R4, thereby enabling the accessibility of the HTTP service through the following endpoint: http://44.67.28.4/.
+
+
+Assurance:
+
+Company-X
+  - SNMP is configured on all Company-X routers to be monitored on the Server
+  - NetFlow is configured on LAN router to monitor traffic type traversing the network
+
+
 Security:
 
 Company-X firewall
   - Zone based firewall is configured to separate LAN and Internet links
   - Control-plane policing has been configured on HQ, R5 and Branch routers
+
+
+Images used:
+
+  - Routers:  i86bi-linux-l3-adventerprisek9-ms.155-2.T.bin
+  - Switches: i86bi_linux_l2-adventerprise-ms.high_iron_20170202.bin
+  - Server:   Win2k16_14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO
+  - Ubuntu:   Ubuntu Desktop VM
+  - PCs:      Webterm docker

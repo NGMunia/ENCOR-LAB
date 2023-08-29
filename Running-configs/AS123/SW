@@ -1,0 +1,113 @@
+Building configuration...
+
+Current configuration : 1645 bytes
+!
+! Last configuration change at 06:21:11 UTC Tue Aug 29 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname SW
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+ip cef
+!
+!
+!
+!
+!
+vtp mode transparent
+no ipv6 cef
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 10
+  private-vlan primary
+  private-vlan association 100-101
+!
+vlan 100
+ name Company-X-vlan
+  private-vlan community
+!
+vlan 101
+  private-vlan isolated
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ switchport private-vlan host-association 10 100
+ switchport mode private-vlan host
+!
+interface Ethernet0/1
+ switchport private-vlan host-association 10 100
+ switchport mode private-vlan host
+!
+interface Ethernet0/2
+ switchport private-vlan host-association 10 101
+ switchport mode private-vlan host
+!
+interface Ethernet0/3
+ switchport private-vlan host-association 10 101
+ switchport mode private-vlan host
+!
+interface Ethernet1/0
+ switchport private-vlan mapping 10 100-101
+ switchport mode private-vlan promiscuous
+!
+interface Ethernet1/1
+ switchport private-vlan mapping 10 100-101
+ switchport mode private-vlan promiscuous
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
