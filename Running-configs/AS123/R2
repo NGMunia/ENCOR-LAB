@@ -1,13 +1,13 @@
 Building configuration...
 
-Current configuration : 2770 bytes
+Current configuration : 2043 bytes
 !
 version 15.5
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R2
+hostname R2-AS-123
 !
 boot-start-marker
 boot-end-marker
@@ -29,7 +29,6 @@ mmi snmp-timeout 180
 !
 !
 fhrp version vrrp v3
-no ip icmp rate-limit unreachable
 !
 !
 !
@@ -44,7 +43,6 @@ no ip icmp rate-limit unreachable
 !
 !
 !
-no ip domain lookup
 ip cef
 no ipv6 cef
 !
@@ -63,7 +61,6 @@ cts logging verbose
 redundancy
 !
 !
-ip tcp synwait-time 5
 !
 !
 !
@@ -78,33 +75,10 @@ ip tcp synwait-time 5
 !
 !
 interface Ethernet0/0
- no ip address
-!
-interface Ethernet0/0.10
- description Company-XYZ-subnet
- encapsulation dot1Q 10
- ip address 44.67.28.2 255.255.255.240
- vrrp 10 address-family ipv4
+ ip address 44.67.28.2 255.255.255.0
+ vrrp 1 address-family ipv4
   vrrpv2
   address 44.67.28.3 primary
-  exit-vrrp
-!
-interface Ethernet0/0.20
- description Company-ABC-subnet
- encapsulation dot1Q 20
- ip address 44.67.28.18 255.255.255.248
- vrrp 20 address-family ipv4
-  vrrpv2
-  address 44.67.28.19 primary
-  exit-vrrp
-!
-interface Ethernet0/0.30
- description Cust-1-subnet
- encapsulation dot1Q 30
- ip address 44.67.28.26 255.255.255.248
- vrrp 30 address-family ipv4
-  vrrpv2
-  address 44.67.28.27 primary
   exit-vrrp
 !
 interface Ethernet0/1
@@ -177,8 +151,7 @@ interface Serial3/3
 !
 router bgp 123
  bgp log-neighbor-changes
- network 44.67.28.0 mask 255.255.255.240
- aggregate-address 44.67.28.0 255.255.255.0 summary-only
+ network 44.67.28.0 mask 255.255.255.0
  neighbor 110.110.110.1 remote-as 110
  neighbor 110.110.110.1 filter-list 10 out
 !
@@ -190,8 +163,5 @@ no ip http server
 no ip http secure-server
 !
 !
-!
-!
-control-plane
 !
 !
