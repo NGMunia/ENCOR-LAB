@@ -1,13 +1,13 @@
 Building configuration...
 
-Current configuration : 3325 bytes
+Current configuration : 2522 bytes
 !
 version 15.5
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R1
+hostname R1-AS-123
 !
 boot-start-marker
 boot-end-marker
@@ -29,7 +29,6 @@ mmi snmp-timeout 180
 !
 !
 fhrp version vrrp v3
-no ip icmp rate-limit unreachable
 !
 !
 !
@@ -44,7 +43,6 @@ no ip icmp rate-limit unreachable
 !
 !
 !
-no ip domain lookup
 ip cef
 no ipv6 cef
 !
@@ -66,7 +64,6 @@ redundancy
 track 1 ip sla 1
  delay down 5 up 5
 !
-ip tcp synwait-time 5
 !
 !
 !
@@ -81,39 +78,12 @@ ip tcp synwait-time 5
 !
 !
 interface Ethernet0/0
- no ip address
-!
-interface Ethernet0/0.10
- description Company-XYZ-subnet
- encapsulation dot1Q 10
- ip address 44.67.28.1 255.255.255.240
- vrrp 10 address-family ipv4
+ ip address 44.67.28.1 255.255.255.0
+ vrrp 1 address-family ipv4
   priority 110
   vrrpv2
   track 1 decrement 40
   address 44.67.28.3 primary
-  exit-vrrp
-!
-interface Ethernet0/0.20
- description Company-ABC-subnet
- encapsulation dot1Q 20
- ip address 44.67.28.17 255.255.255.248
- vrrp 20 address-family ipv4
-  priority 110
-  vrrpv2
-  track 1 decrement 40
-  address 44.67.28.19 primary
-  exit-vrrp
-!
-interface Ethernet0/0.30
- description Cust-1-subnet
- encapsulation dot1Q 30
- ip address 44.67.28.25 255.255.255.248
- vrrp 30 address-family ipv4
-  priority 110
-  vrrpv2
-  track 1 decrement 40
-  address 44.67.28.27 primary
   exit-vrrp
 !
 interface Ethernet0/1
@@ -186,8 +156,7 @@ interface Serial3/3
 !
 router bgp 123
  bgp log-neighbor-changes
- network 44.67.28.0 mask 255.255.255.240
- aggregate-address 44.67.28.0 255.255.255.0 summary-only
+ network 44.67.28.0 mask 255.255.255.0
  neighbor 100.100.100.1 remote-as 100
  neighbor 100.100.100.1 route-map inbound-traffic-map out
  neighbor 100.100.100.1 filter-list 10 out
@@ -211,10 +180,5 @@ route-map inbound-traffic-map permit 10
  set as-path prepend 123 123 123 123
 !
 route-map inbound-traffic-map permit 20
-!
-!
-!
-control-plane
-!
 !
 !
