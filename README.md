@@ -72,7 +72,7 @@ Assurance:
 
 Company-X
   - SNMP is configured on all Company-X routers to be monitored on the Server
-  - NetFlow is configured on LAN router to monitor traffic type traversing the network
+  - NetFlow is configured on LAN, R5 and Branch-1 routers to monitor traffic type traversing from the LAN network
 
 
 Security:
