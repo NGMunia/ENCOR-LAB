@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 3409 bytes
+Current configuration : 3490 bytes
 !
-! No configuration change since last restart
+! Last configuration change at 08:51:09 GMT Wed Aug 30 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -15,7 +15,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$3wfN$GhnW34dWHVnUqxsb.IWgb/
+enable secret 5 $1$Xz9i$8wuUpTrKLlMOkGQz7pvpU.
 !
 aaa new-model
 !
@@ -63,6 +63,7 @@ ip dhcp pool HQ-LAN
 !
 !
 !
+ip flow-cache timeout active 1
 no ip domain lookup
 ip domain name abc.com
 ip cef
@@ -79,7 +80,7 @@ multilink bundle-name authenticated
 cts logging verbose
 !
 !
-username Automation secret 5 $1$PNBG$mLOWbTPCWXAutNtnBYdwM0
+username Automation secret 5 $1$9UVf$OWWwM6aGbuD9L3bsWTsQo/
 !
 redundancy
 !
@@ -122,6 +123,9 @@ policy-map Network-traffic-policy
 !
 interface Ethernet0/0
  ip address 192.168.10.1 255.255.255.0
+ ip nbar protocol-discovery
+ ip flow ingress
+ ip flow egress
  ip ospf 1 area 10
 !
 interface Ethernet0/1
@@ -199,18 +203,21 @@ router ospf 1
 !
 ip forward-protocol nd
 !
+ip flow-export source Ethernet0/0
+ip flow-export version 9
+ip flow-export destination 192.168.50.100 9996
+ip flow-top-talkers
+ top 5
+ sort-by bytes
 !
 no ip http server
 no ip http secure-server
 !
-ip access-list standard SNMP-SERVER
+ip access-list standard snmp_acl
  permit 192.168.50.100
 !
-ip access-list extended critical-traffic-acl
- permit ip any 192.168.50.0 0.0.0.255
 !
-!
-snmp-server community device_snmp RO SNMP-SERVER
+snmp-server community device_snmp RO snmp_acl
 snmp-server system-shutdown
 snmp-server enable traps config
 snmp-server host 192.168.50.100 version 2c device_snmp 
@@ -228,13 +235,8 @@ control-plane
 !
 !
 line con 0
- exec-timeout 0 0
- privilege level 15
  logging synchronous
 line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
 line vty 0 4
  transport input ssh
 !

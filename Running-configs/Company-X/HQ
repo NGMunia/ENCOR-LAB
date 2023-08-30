@@ -1,9 +1,8 @@
 Building configuration...
 
-Current configuration : 4271 bytes
+Current configuration : 3816 bytes
 !
-! Last configuration change at 17:54:55 GMT Wed Aug 16 2023 by Automation
-! NVRAM config last updated at 17:58:04 GMT Wed Aug 16 2023 by Automation
+! Last configuration change at 08:50:52 GMT Wed Aug 30 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -16,7 +15,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$gPJv$FqxVp.boHlfI6GfFPSTaG.
+enable secret 5 $1$Sy.V$YsvOpi7j6JI7umMtkHgjB0
 !
 aaa new-model
 !
@@ -58,7 +57,7 @@ no ip icmp rate-limit unreachable
 !
 !
 no ip domain lookup
-ip domain name x.com
+ip domain name abc.com
 ip cef
 no ipv6 cef
 !
@@ -73,7 +72,7 @@ multilink bundle-name authenticated
 cts logging verbose
 !
 !
-username Automation secret 5 $1$Ri4b$GFxl0rQhQ.Bku.Jf8AJj3/
+username Automation secret 5 $1$P3.F$A6u4hgHyH2mRJAl5jMK9U/
 !
 redundancy
 !
@@ -219,20 +218,11 @@ no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Ethernet0/0 110.110.110.9
 !
-ip access-list standard SNMP-SERVER
+ip access-list standard snmp_acl
  permit 192.168.50.100
 !
-ip access-list extended Icmp-CoPP-acl
- permit icmp any any
-ip access-list extended Management-CoPP-acl
- permit udp host 192.168.50.100 any eq snmp
- permit tcp any any eq 22
-ip access-list extended Routing-CoPP-acl
- permit ospf any host 224.0.0.6
- permit ospf any host 224.0.0.5
 !
-!
-snmp-server community device_snmp RO SNMP-SERVER
+snmp-server community device_snmp RO snmp_acl
 snmp-server system-shutdown
 snmp-server enable traps config
 snmp-server host 192.168.50.100 version 2c device_snmp 
@@ -251,17 +241,12 @@ control-plane
 !
 !
 line con 0
- exec-timeout 0 0
- privilege level 15
  logging synchronous
 line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
 line vty 0 4
  transport input ssh
 !
 ntp update-calendar
-ntp server 10.0.0.1
+ntp server 10.0.0.5
 !
 end

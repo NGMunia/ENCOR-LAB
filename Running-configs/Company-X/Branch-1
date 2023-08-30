@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 4314 bytes
+Current configuration : 4244 bytes
 !
-! Last configuration change at 17:57:55 GMT Wed Aug 16 2023 by Automation
+! Last configuration change at 08:46:21 GMT Wed Aug 30 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -15,7 +15,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$yN.4$tJLiNbnAl/L7sf1w41MwM1
+enable secret 5 $1$wCp7$uGOr1IzeTwt4FsgZ6GMno/
 !
 aaa new-model
 !
@@ -80,7 +80,7 @@ multilink bundle-name authenticated
 cts logging verbose
 !
 !
-username Automation secret 5 $1$aImK$E4aW/vFC7eHFKPGugf7t2.
+username Automation secret 5 $1$rCaK$Sfk9TYn8w1TUSW1I87rlA/
 !
 redundancy
 !
@@ -151,6 +151,9 @@ interface Ethernet0/0
 !
 interface Ethernet0/1
  ip address 192.168.20.1 255.255.255.0
+ ip nbar protocol-discovery
+ ip flow ingress
+ ip flow egress
  ip ospf 1 area 20
 !
 interface Ethernet0/2
@@ -219,11 +222,12 @@ interface Serial3/3
 !
 router ospf 1
  router-id 172.19.10.2
- passive-interface Ethernet0/1
 !
 ip forward-protocol nd
 !
-ip flow-export destination 192.168.50.100 9996
+ip flow-export source Ethernet0/1
+ip flow-export version 9
+ip flow-export destination 192.168.50.100 9998
 ip flow-top-talkers
  top 5
  sort-by bytes
@@ -232,21 +236,19 @@ no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Ethernet0/0 150.150.150.1
 !
-ip access-list extended Icmp-CoPP-acl
- permit icmp any any
-ip access-list extended Management-CoPP-acl
- permit udp host 192.168.50.100 any eq snmp
- permit tcp any any eq 22
-ip access-list extended Routing-CoPP-acl
- permit ospf any host 224.0.0.6
+ip access-list standard snmp_acl
+ permit 192.168.50.100
 !
 !
+snmp-server community device_snmp RO snmp_acl
+snmp-server system-shutdown
+snmp-server enable traps config
+snmp-server host 192.168.50.100 version 2c device_snmp 
 !
 !
 !
 !
 control-plane
- service-policy input CoPP-Policy
 !
 !
 !
@@ -256,13 +258,8 @@ control-plane
 !
 !
 line con 0
- exec-timeout 0 0
- privilege level 15
  logging synchronous
 line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
 line vty 0 4
  transport input ssh
 !

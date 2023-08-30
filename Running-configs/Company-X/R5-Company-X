@@ -1,21 +1,21 @@
 Building configuration...
 
-Current configuration : 4301 bytes
+Current configuration : 4435 bytes
 !
-! Last configuration change at 17:56:33 GMT Wed Aug 16 2023 by Automation
+! Last configuration change at 08:46:34 GMT Wed Aug 30 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
 service timestamps log datetime localtime year
 no service password-encryption
 !
-hostname R5
+hostname R5-Company-X
 !
 boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$okRa$olHUx5S1y/99Q0CQbbHy8.
+enable secret 5 $1$BDvp$pYWYnlfQn6UCui4JqFFIP0
 !
 aaa new-model
 !
@@ -56,8 +56,9 @@ no ip icmp rate-limit unreachable
 !
 !
 !
+ip flow-cache timeout active 1
 no ip domain lookup
-ip domain name x.com
+ip domain name abc.com
 ip cef
 no ipv6 cef
 !
@@ -72,7 +73,7 @@ multilink bundle-name authenticated
 cts logging verbose
 !
 !
-username Automation secret 5 $1$lDt7$i9FjW5bA26I5E47mTUA1q.
+username Automation secret 5 $1$es4g$OxM1fdpTPT.uz5d/Gj8Fr/
 !
 redundancy
 !
@@ -133,20 +134,19 @@ interface Tunnel10
  ip ospf hello-interval 15
  ip ospf priority 0
  ip ospf 1 area 0
- tunnel source Ethernet0/0.10
+ tunnel source Ethernet0/0
  tunnel mode gre multipoint
  tunnel key 10
  tunnel protection ipsec profile crypto-profile
 !
 interface Ethernet0/0
- no ip address
-!
-interface Ethernet0/0.10
- encapsulation dot1Q 10
- ip address 44.67.28.5 255.255.255.240
+ ip address 44.67.28.5 255.255.255.0
 !
 interface Ethernet0/1
  ip address 192.168.50.1 255.255.255.0
+ ip nbar protocol-discovery
+ ip flow ingress
+ ip flow egress
  ip ospf 1 area 50
 !
 interface Ethernet0/2
@@ -219,12 +219,20 @@ router ospf 1
 !
 ip forward-protocol nd
 !
+ip flow-export source Ethernet0/1
+ip flow-export version 9
+ip flow-export destination 192.168.50.100 9997
+ip flow-top-talkers
+ top 5
+ sort-by bytes
 !
 no ip http server
 no ip http secure-server
-ip route 0.0.0.0 0.0.0.0 Ethernet0/0.10 44.67.28.3
+ip route 0.0.0.0 0.0.0.0 Ethernet0/0 44.67.28.3
 !
 ip access-list standard SNMP-SERVER
+ permit 192.168.50.100
+ip access-list standard snmp_acl
  permit 192.168.50.100
 !
 ip access-list extended Icmp-CoPP-acl
@@ -236,7 +244,7 @@ ip access-list extended Routing-CoPP-acl
  permit ospf any host 224.0.0.6
 !
 !
-snmp-server community device_snmp RO SNMP-SERVER
+snmp-server community device_snmp RO snmp_acl
 snmp-server system-shutdown
 snmp-server enable traps config
 snmp-server host 192.168.50.100 version 2c device_snmp 
@@ -255,13 +263,8 @@ control-plane
 !
 !
 line con 0
- exec-timeout 0 0
- privilege level 15
  logging synchronous
 line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
 line vty 0 4
  transport input ssh
 !

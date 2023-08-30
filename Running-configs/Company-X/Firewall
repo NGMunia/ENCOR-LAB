@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 3397 bytes
+Current configuration : 3420 bytes
 !
-! No configuration change since last restart
+! Last configuration change at 08:27:29 GMT Wed Aug 30 2023 by Automation
 !
 version 15.5
 service timestamps debug datetime localtime year
@@ -15,7 +15,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$HCNh$PobbAf6RdqWkTnkTmqWQ.1
+enable secret 5 $1$auCF$u7IO1d7sUFDwIzyOg03QA0
 !
 aaa new-model
 !
@@ -72,7 +72,7 @@ multilink bundle-name authenticated
 cts logging verbose
 !
 !
-username Automation secret 5 $1$8s/X$gRQEHqmV.NyYdBwkoIHf6/
+username Automation secret 5 $1$lNAU$eV1i0UHf2LerSVU82xDmw/
 !
 redundancy
 !
@@ -200,13 +200,13 @@ no ip http secure-server
 ip nat inside source list nat_acl interface Ethernet0/2 overload
 ip route 0.0.0.0 0.0.0.0 Ethernet0/2 192.168.122.1
 !
-ip access-list standard SNMP-SERVER
- permit 192.168.50.100
 ip access-list standard nat_acl
  permit 192.168.10.0 0.0.0.255
+ip access-list standard snmp_acl
+ permit 192.168.50.100
 !
 !
-snmp-server community device_snmp RO SNMP-SERVER
+snmp-server community device_snmp RO snmp_acl
 snmp-server system-shutdown
 snmp-server enable traps config
 snmp-server host 192.168.50.100 version 2c device_snmp 

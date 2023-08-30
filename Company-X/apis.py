@@ -19,13 +19,15 @@ def snmpconfig(Device_ID: str, post:snmpclass):
     device = Routers[Device_ID]
     conn   = ConnectHandler(**device)
     conn.enable()
-    commands = ['ip access-list standard SNMP-SERVER',
+    commands = ['ip access-list standard snmp_acl',
                 'permit host '+post.snmp_server,
-                'snmp-server community device_snmp ro SNMP-SERVER',
+                'snmp-server community device_snmp ro snmp_acl',
                 'snmp-server system-shutdown',
                 'snmp-server enable traps config',
                 'snmp-server host '+post.snmp_server+' traps version 2c device_snmp']
     result = conn.send_config_set(commands)
+    conn.save_config()
+    conn.disconnect()
     return result.splitlines()
 
 
@@ -41,7 +43,7 @@ def snmpconfig(Device_ID: str, post:ntpclass):
     conn   = ConnectHandler(**device)
     conn.enable()
 
-    env = Environment(loader=FileSystemLoader(f'{post.filepath}'))
+    env = Environment(loader=FileSystemLoader(f'{post.template_filepath}'))
     template = env.get_template('ntp.j2')
     variables = {'ntp_server': post.ntp_server}
     commands = template.render(variables)
@@ -76,6 +78,8 @@ def netflow(Device_ID: str, post:netflowclass):
                 'top 5',
                 'sort-by bytes']
     result = conn.send_config_set(commands)
+    conn.save_config()
+    conn.disconnect()
     return result.splitlines()
 
 
