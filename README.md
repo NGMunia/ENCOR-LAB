@@ -65,7 +65,7 @@ Company-X LAN router:
 NAT:
 
   - The router labeled as 'HTTP' operates in a manner that emulates the functionality of a web server.     
-  - Port forwarding measures have been appropriately established on the router denoted as R4, thereby enabling the accessibility of the HTTP service through the following endpoint: http://44.67.28.4/.
+  - Port forwarding measures have been appropriately established on the router denoted as R4, thereby enabling the accessibility of the HTTP service through the following endpoint: http://44.67.28.4/. This service can be accessed via PC2 on CUSt-A
 
 
 Assurance:
