@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 2519 bytes
+Current configuration : 2421 bytes
 !
-! Last configuration change at 09:34:08 UTC Wed Aug 16 2023
+! Last configuration change at 05:08:46 UTC Thu Aug 31 2023
 !
 version 15.5
 service timestamps debug datetime msec
@@ -84,7 +84,7 @@ interface Tunnel0
  ip mtu 1400
  ip nhrp authentication abc123
  ip nhrp network-id 10
- ip nhrp nhs 172.31.1.1 nbma 44.67.28.20 multicast
+ ip nhrp nhs 172.31.1.1 nbma 44.67.28.6 multicast
  ip nhrp registration no-unique
  tunnel source Ethernet0/0
  tunnel mode gre multipoint
@@ -179,10 +179,5 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 Ethernet0/0 110.110.110.5
-!
-!
-!
-!
-control-plane
 !
 !

@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 2772 bytes
+Current configuration : 2589 bytes
 !
-! Last configuration change at 09:26:07 UTC Wed Aug 16 2023
+! Last configuration change at 05:07:18 UTC Thu Aug 31 2023
 !
 version 15.5
 service timestamps debug datetime msec
@@ -85,19 +85,14 @@ interface Tunnel0
  ip nhrp authentication abc123
  ip nhrp map multicast dynamic
  ip nhrp network-id 10
- tunnel source Ethernet0/0.20
+ tunnel source Ethernet0/0
  tunnel mode gre multipoint
 !
 interface Ethernet0/0
- no ip address
-!
-interface Ethernet0/0.20
- encapsulation dot1Q 20
- ip address 44.67.28.20 255.255.255.248
+ ip address 44.67.28.6 255.255.255.0
 !
 interface Ethernet0/1
  no ip address
- shutdown
 !
 interface Ethernet0/2
  no ip address
@@ -198,7 +193,6 @@ ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
-ip route 0.0.0.0 0.0.0.0 Ethernet0/0.20 44.67.28.19
-!
+ip route 0.0.0.0 0.0.0.0 Ethernet0/0 44.67.28.3
 !
 !
