@@ -1,7 +1,7 @@
 # ENCOR Enterprise Network Lab
 
 **A full-scale enterprise and service-provider lab showcasing advanced routing, overlays, security, automation, QoS, and network assurance.**  
-Designed to reflect real-world ISP and enterprise network architectures aligned with **CCNP Enterprise** objectives.
+Designed to reflect enterprise network architectures aligned with **CCNP Enterprise (ENCOR)** objectives.
 
 ![BGP](https://img.shields.io/badge/BGP-Advanced-blue)
 ![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
@@ -18,7 +18,7 @@ Designed to reflect real-world ISP and enterprise network architectures aligned 
 - **Security:** Zone-Based Firewall, CoPP, segmentation, NAT
 - **Automation:** Python, FastAPI, Netmiko, Jinja2
 - **Monitoring:** SNMP, NetFlow
-- **Level:** CCNP Enterprise / Real-world ISP design
+- **Level:** CCNP Enterprise (ENCOR)
 
 ---
 
@@ -35,9 +35,9 @@ Designed to reflect real-world ISP and enterprise network architectures aligned 
 
 ## 🗺 Network Architecture
 
-The lab simulates a hybrid **enterprise + service provider** environment with multiple autonomous systems, enterprise customers, and secure overlays.
+The lab simulates a hybrid **enterprise** environment with multiple autonomous systems, enterprise customers, and secure overlays.
 
-*(Topology diagram can be found in `/docs`)*
+
 
 ---
 
