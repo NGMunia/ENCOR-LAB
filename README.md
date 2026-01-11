@@ -238,7 +238,18 @@ interface Tunnel78
 - Integrated **Netmiko** for network device interaction
 - Used **Jinja2 templates** for reusable and scalable configuration generation
 
+```python
 
+from netmiko import ConnectHandler
+from rich import print as rp
+from Devices import Routers
+
+for devices in Routers.values():
+    conn = ConnectHandler(**devices)
+    conn.enable()
+    output = conn.send_command('show version',use_textfsm=True)
+    rp(output)
+```
 
 ---
 
