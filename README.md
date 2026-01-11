@@ -7,11 +7,11 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 ![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
 ![Security](https://img.shields.io/badge/Security-Enterprise-red)
 ![Automation](https://img.shields.io/badge/Automation-Python%20%7C%20FastAPI-orange)
-![CCNP](https://img.shields.io/badge/CCNP-Enterprise-success)
+![CCNP](https://img.shields.io/badge/CCNP-ENCOR-success)
 
 ---
 
-## 🔍 Quick Overview
+## Quick Overview
 
 - **Routing:** Multi-AS BGP, traffic engineering, summarization
 - **Overlays:** DMVPN, LISP, IPsec VTI
@@ -22,7 +22,7 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 
 ---
 
-## 🎯 Project Objectives
+## Project Objectives
 
 - Design and implement multi-AS enterprise routing
 - Apply BGP traffic engineering techniques
@@ -33,7 +33,7 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 
 ---
 
-## 🗺 Network Architecture
+## Network Architecture
 
 The lab simulates a hybrid **enterprise** environment with multiple autonomous systems, enterprise customers, and secure overlays.
 
@@ -41,7 +41,7 @@ The lab simulates a hybrid **enterprise** environment with multiple autonomous s
 
 ---
 
-## 🌐 Routing & BGP Design
+## Routing & BGP Design
 
 ### AS 123 – Enterprise Edge
 
@@ -74,7 +74,7 @@ Prevents lateral communication while maintaining shared infrastructure.
 
 ---
 
-## 🧩 Overlay Technologies
+## Overlay Technologies
 
 ### Company-X – DMVPN
 
@@ -108,7 +108,7 @@ Demonstrates scalable and resilient enterprise WAN design.
 
 ---
 
-## ⚙️ Automation & Programmability
+## Automation & Programmability
 
 ### Company-X Automation
 
@@ -121,7 +121,7 @@ Demonstrates API-driven automation and infrastructure-as-code principles.
 
 ---
 
-## 🚦 Quality of Service (QoS)
+## Quality of Service (QoS)
 
 ### Company-X LAN Router
 
@@ -134,7 +134,7 @@ Implements enterprise-grade traffic classification and prioritization.
 
 ---
 
-## 🔄 Network Address Translation (NAT)
+## Network Address Translation (NAT)
 
 - Router labeled **HTTP** emulates a web server
 - Port forwarding configured on **R4**
@@ -142,3 +142,31 @@ Implements enterprise-grade traffic classification and prioritization.
 
 ```text
 http://44.67.28.4/
+
+```
+
+---
+
+##  Network Assurance
+
+### Company-X
+ - SNMP is configured on all Company-X routers to be monitored on the Server
+ - NetFlow is configured on LAN, R5 and Branch-1 routers to monitor traffic type traversing  from the LAN network
+
+---
+## Security:
+
+Company-X firewall
+  - Zone based firewall is configured to separate LAN and Internet links
+  - Control-plane policing has been configured on HQ, R5 and Branch routers
+
+
+## Images used:
+
+  - Routers:  i86bi-linux-l3-adventerprisek9-ms.155-2.T.bin
+  - Switches: i86bi_linux_l2-adventerprise-ms.high_iron_20170202.bin
+  - Server:   Win2k16_14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO
+  - Ubuntu:   Ubuntu Desktop VM
+  - PCs:      Webterm docker
+
+
