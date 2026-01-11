@@ -299,6 +299,9 @@ interface Ethernet0/1
 http://44.67.28.4/
 
 ```
+```bash
+ip nat inside source static tcp 192.168.40.100 80 44.67.28.4 80 extendable
+```
 
 ---
 
