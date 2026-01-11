@@ -4,11 +4,11 @@
 Designed to reflect enterprise network architectures aligned with **CCNP Enterprise (ENCOR)** objectives.
 
 ![Routing](https://img.shields.io/badge/Routing-BGP%20%7C%20OSPF-orange)
-![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
-![Security](https://img.shields.io/badge/Cryptography-Ent-red)
+![Overlay](https://img.shields.io/badge/Overlay-DMVPN%20%7C%20IPsec-VTIBGP%20%7C%20LISP-green)
+![Security](https://img.shields.io/badge/Cryptography-red)
 ![Automation](https://img.shields.io/badge/Automation-Python-orange)
 ![CCNP](https://img.shields.io/badge/CCNP-ENCOR-success)
-![Quality of service](https://img.shields.io/badge/Quality of Service/DiffServ-red)
+![QoS](https://img.shields.io/badge/QoS/DiffServ-red)
 
 ---
 
