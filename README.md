@@ -11,6 +11,9 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 
 ---
 
+
+![Topology](/Network-Topology.png)
+
 ## Quick Overview
 
 - **Routing:** Multi-AS BGP, traffic engineering, summarization
