@@ -1,91 +1,144 @@
-# ENCOR-LAB
+# ENCOR Enterprise Network Lab
 
-BGP-Routing:
+**A full-scale enterprise and service-provider lab showcasing advanced routing, overlays, security, automation, QoS, and network assurance.**  
+Designed to reflect real-world ISP and enterprise network architectures aligned with **CCNP Enterprise** objectives.
 
-AS 123:
-- Load-balancing:
-  - Outbound traffic is via R1 (VRRPv3)
-  - VRRP is configured with object tracking with the help
-    of IPSLA
-  - Inbound traffic is via R2 (AS-prepending)
-- AS is a non-transit AS
+![BGP](https://img.shields.io/badge/BGP-Advanced-blue)
+![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
+![Security](https://img.shields.io/badge/Security-Enterprise-red)
+![Automation](https://img.shields.io/badge/Automation-Python%20%7C%20FastAPI-orange)
+![CCNP](https://img.shields.io/badge/CCNP-Enterprise-success)
 
-Private VLANs (UPDATE):
-   - Private vlans have been configured on device (SW) to segregate traffic between clients
-       - Community VLAN 100 - Company X
-       - Isolated VLAN 101
+---
 
-AS-130
-  - Removes the private-AS while advertising the 17.17.17.0/24 prefix
-  - Advertises only a default-route to AS65530
+## 🔍 Quick Overview
 
-AS-140
-  - Advertises 140.140.140.0/24 as a summary prefix
+- **Routing:** Multi-AS BGP, traffic engineering, summarization
+- **Overlays:** DMVPN, LISP, IPsec VTI
+- **Security:** Zone-Based Firewall, CoPP, segmentation, NAT
+- **Automation:** Python, FastAPI, Netmiko, Jinja2
+- **Monitoring:** SNMP, NetFlow
+- **Level:** CCNP Enterprise / Real-world ISP design
 
-AS-150
-  - Advertises 150.150.150.0/24 as a summary prefix  
+---
 
-AS65530
-  - Advertises 17.17.17.0/24 as a summary prefix
+## 🎯 Project Objectives
 
+- Design and implement multi-AS enterprise routing
+- Apply BGP traffic engineering techniques
+- Deploy scalable WAN overlay technologies
+- Secure network infrastructure and control planes
+- Automate repetitive network operations
+- Monitor and analyze network performance and traffic flows
 
-Overlay:
+---
 
-Company-X
-  - DMVPN phase 2 tunnel between its HQ, Branch and R5 routers with HQ being the hub
-  - OSPF is used to route traffic between tunnels
-  - DMVPN MGRE tunnel is area 0 and HQ,R5 and Branch networks are Areas 10, 50, 20 respectively.
+## 🗺 Network Architecture
 
-Company-A
-  - LISP is used to advertise prefixes behind R16 and R26.
-  - LISP is running on top of mGRE (for privacy purposes)
-  - R6 acts as Map server/resolver
+The lab simulates a hybrid **enterprise + service provider** environment with multiple autonomous systems, enterprise customers, and secure overlays.
 
-Cust-A
-  - IPsec VTI is configured between R7 and R8
-  - Multicast Traffic is propagated through the tunnel between R7 and R8(PIM sparse mode) with static RP
+*(Topology diagram can be found in `/docs`)*
 
+---
 
-Automation:
+## 🌐 Routing & BGP Design
 
-Company-X
-  - Automation is used to configure repetitive tasks on routers like SNMP etc.
-  - ive created basic REST-APIs using FastAPI that combined with Netmiko to interact with network devices.
-  - Ive also created Jinja templates used in conjuction with Netmiko and FastAPi that are used to configure the routers.
+### AS 123 – Enterprise Edge
 
+- Non-transit autonomous system
+- Outbound traffic via **R1** using **VRRPv3**
+- VRRP object tracking integrated with **IP SLA**
+- Inbound traffic influenced via **AS-path prepending** toward **R2**
+- Provides resiliency, redundancy, and deterministic traffic flow
 
-Quality of Service:
+### Private VLANs
 
-Company-X LAN router:
-  - Social media traffic is policed to 250kbps
-  - Scavenger traffic (torrent) is dropped.
-  - Traffic destined to R5 is marked as critical data and given a CBWFQ bandwidth of 30% of CIR
+Implemented on the access switch to isolate customer traffic:
 
+- **Community VLAN 100** – Company-X
+- **Isolated VLAN 101**
 
-NAT:
+Prevents lateral communication while maintaining shared infrastructure.
 
-  - The router labeled as 'HTTP' operates in a manner that emulates the functionality of a web server.     
-  - Port forwarding measures have been appropriately established on the router denoted as R4, thereby enabling the accessibility of the HTTP service through the following endpoint: http://44.67.28.4/. This service can be accessed via PC2 on CUSt-A
+---
 
+### BGP Autonomous Systems Overview
 
-Assurance:
+| AS Number | Function |
+|---------|---------|
+| AS 123 | Enterprise non-transit AS with traffic engineering |
+| AS 130 | Removes private AS, advertises `17.17.17.0/24`, sends default route |
+| AS 140 | Advertises summary prefix `140.140.140.0/24` |
+| AS 150 | Advertises summary prefix `150.150.150.0/24` |
+| AS 65530 | Upstream provider advertising summarized routes |
 
-Company-X
-  - SNMP is configured on all Company-X routers to be monitored on the Server
-  - NetFlow is configured on LAN, R5 and Branch-1 routers to monitor traffic type traversing from the LAN network
+---
 
+## 🧩 Overlay Technologies
 
-Security:
+### Company-X – DMVPN
 
-Company-X firewall
-  - Zone based firewall is configured to separate LAN and Internet links
-  - Control-plane policing has been configured on HQ, R5 and Branch routers
+- **DMVPN Phase 2**
+- HQ acts as hub, Branch and R5 as spokes
+- **OSPF** used as the overlay routing protocol
+- Tunnel interface configured in **Area 0**
+- Internal networks:
+  - HQ – Area 10
+  - Branch – Area 20
+  - R5 – Area 50
 
+Demonstrates scalable and resilient enterprise WAN design.
 
-Images used:
+---
 
-  - Routers:  i86bi-linux-l3-adventerprisek9-ms.155-2.T.bin
-  - Switches: i86bi_linux_l2-adventerprise-ms.high_iron_20170202.bin
-  - Server:   Win2k16_14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO
-  - Ubuntu:   Ubuntu Desktop VM
-  - PCs:      Webterm docker
+### Company-A – LISP
+
+- **LISP** used to advertise prefixes behind R16 and R26
+- Runs on top of **mGRE** for privacy
+- **R6** acts as Map Server and Map Resolver
+- Separates endpoint identity from location for scalability
+
+---
+
+### Cust-A – IPsec VTI
+
+- **IPsec VTI** tunnel between R7 and R8
+- Supports multicast traffic over VPN
+- **PIM Sparse Mode** with a static Rendezvous Point (RP)
+
+---
+
+## ⚙️ Automation & Programmability
+
+### Company-X Automation
+
+- Automated repetitive router configurations (e.g. SNMP)
+- Developed custom **REST APIs** using **FastAPI**
+- Integrated **Netmiko** for network device interaction
+- Used **Jinja2 templates** for reusable and scalable configuration generation
+
+Demonstrates API-driven automation and infrastructure-as-code principles.
+
+---
+
+## 🚦 Quality of Service (QoS)
+
+### Company-X LAN Router
+
+- Social media traffic policed to **250 kbps**
+- Scavenger traffic (torrent) dropped
+- Traffic destined to **R5** marked as critical
+- Critical traffic allocated **30% CBWFQ bandwidth** of CIR
+
+Implements enterprise-grade traffic classification and prioritization.
+
+---
+
+## 🔄 Network Address Translation (NAT)
+
+- Router labeled **HTTP** emulates a web server
+- Port forwarding configured on **R4**
+- HTTP service accessible via:
+
+```text
+http://44.67.28.4/
