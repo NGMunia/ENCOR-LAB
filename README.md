@@ -2,7 +2,8 @@
 
 **A full-scale enterprise and service-provider lab showcasing advanced routing, overlays, security, automation, QoS, and network assurance.**  
 Designed to reflect enterprise network architectures aligned with **CCNP Enterprise (ENCOR)** objectives.
-![Routing](https://img.shields.io/badge/BGP%20%7C%20OSPF-orange)
+
+![Routing](https://img.shields.io/badge/Routing-BGP%20%7C%20OSPF-orange)
 ![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
 ![Security](https://img.shields.io/badge/Cryptography-Ent-red)
 ![Automation](https://img.shields.io/badge/Automation-Python-orange)
