@@ -3,11 +3,12 @@
 **A full-scale enterprise and service-provider lab showcasing advanced routing, overlays, security, automation, QoS, and network assurance.**  
 Designed to reflect enterprise network architectures aligned with **CCNP Enterprise (ENCOR)** objectives.
 
-![BGP](https://img.shields.io/badge/BGP-Advanced-blue)
+![BGP](https://img.shields.io/badge/BGP-Routing-blue)
 ![DMVPN](https://img.shields.io/badge/DMVPN-Phase%202-green)
-![Security](https://img.shields.io/badge/Security-Enterprise-red)
-![Automation](https://img.shields.io/badge/Automation-Python%20%7C%20FastAPI-orange)
+![Security](https://img.shields.io/badge/Cryptography-Ent-red)
+![Automation](https://img.shields.io/badge/Automation-Python%20%7C%20-orange)
 ![CCNP](https://img.shields.io/badge/CCNP-ENCOR-success)
+![Quality of service](https://img.shields.io/badge/DiffServ-Ent-red)
 
 ---
 
