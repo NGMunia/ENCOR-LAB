@@ -234,9 +234,7 @@ interface Tunnel78
 ### Company-X Automation
 
 - Automated repetitive router configurations (e.g. SNMP)
-- Developed custom **REST APIs** using **FastAPI**
 - Integrated **Netmiko** for network device interaction
-- Used **Jinja2 templates** for reusable and scalable configuration generation
 
 ```python
 
