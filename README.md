@@ -8,7 +8,7 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 ![Security](https://img.shields.io/badge/Cryptography-red)
 ![Automation](https://img.shields.io/badge/Automation-Python-orange)
 ![CCNP](https://img.shields.io/badge/CCNP-ENCOR-success)
-![QoS](https://img.shields.io/badge/QoS/DiffServ-red)
+![QoS](https://img.shields.io/badge/QoS-DiffServ-red)
 
 ---
 
