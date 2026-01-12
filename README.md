@@ -17,12 +17,11 @@ Designed to reflect enterprise network architectures aligned with **CCNP Enterpr
 
 ## Quick Overview
 
-- **Routing:** Multi-AS BGP, traffic engineering, summarization
+- **Routing:** Multi-AS BGP, EIGRP, OSPF,summarization
 - **Overlays:** DMVPN, LISP, IPsec VTI
-- **Security:** Zone-Based Firewall, CoPP, segmentation, NAT
-- **Automation:** Python, FastAPI, Netmiko, Jinja2
-- **Monitoring:** SNMP, NetFlow
-- **Level:** CCNP Enterprise (ENCOR)
+- **Security:** Zone-Based Firewall, CoPP, NAT
+- **Automation:** Python (Netmiko), Jinja2
+- **Monitoring:** SNMP, NetFlow, SPAN/RSPAN, Syslog, IPSLA
 
 ---
 
