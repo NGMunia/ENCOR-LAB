@@ -91,7 +91,7 @@ Prevents lateral communication while maintaining shared infrastructure.
 
 | AS Number | Function |
 |---------|---------|
-| AS 123 | Enterprise non-transit AS with traffic engineering |
+| AS 123 | Enterprise non-transit AS with high availability (VRRPv3) |
 | AS 130 | Removes private AS, advertises `17.17.17.0/24`, sends default route |
 | AS 140 | Advertises summary prefix `140.140.140.0/24` |
 | AS 150 | Advertises summary prefix `150.150.150.0/24` |
